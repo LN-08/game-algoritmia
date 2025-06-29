@@ -16,8 +16,11 @@ nombre_usuario = input("Nombre: ")
 quiere_jugar = seguir_jugando('Desea jugar (s/n): ', ['s', 'n', 'S', 'N'])
 
 while quiere_jugar and hay_una_pregunta_o_mas and not ya_gano and not ya_perdio:
-
-        mostrar_posicion_en_primera_ronda(es_primera_ronda, posicion_actual)
+        
+        if es_primera_ronda:
+            print(mostrar_posicion('actual', posicion_actual))
+            es_primera_ronda = False
+           
 
         posicion_previa = posicion_actual
 
@@ -37,19 +40,24 @@ while quiere_jugar and hay_una_pregunta_o_mas and not ya_gano and not ya_perdio:
 
             es_correcta = verificar_respuesta_correcta(pregunta_y_respuestas, respuesta_final)
 
+            if es_correcta:
+                print(informar_posicion('Sube', tablero_valores, posicion_actual, 1))
+                
+            else:
+                print(informar_posicion('Baja', tablero_valores, posicion_actual, -1))
+
             posicion_actual = hacer_movimientos_correspondientes(tablero_valores, posicion_actual, es_correcta)
-
-
+                
             print(mostrar_posicion('previa', posicion_previa))
-            print(mostrar_posicion('actual', posicion_actual))
+            print(mostrar_posicion('actual', posicion_actual))      
             print("-----------------------")
 
 
-            if posicion_actual == ULTIMA_POSICION:
+            if posicion_actual >= ULTIMA_POSICION:
                 ya_gano = True
                 print(f"Felicitaciones {nombre_usuario}, ganaste !")
 
-            elif posicion_actual == PRIMERA_POSICION:
+            elif posicion_actual <= PRIMERA_POSICION:
                 ya_perdio = True
                 print(f"Lo siento {nombre_usuario}, perdiste !")
 
@@ -61,6 +69,4 @@ print(f"Quedaste en la posicion numero {posicion_actual}.")
 
 datos_user = [nombre_usuario, posicion_actual]
 
-guardar_datos_csv("./paquete_datos/Score.csv", datos_user)
-
-
+guardar_datos_csv("./algoritmia/paquete_datos/Score.csv", datos_user)

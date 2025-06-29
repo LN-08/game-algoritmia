@@ -1,88 +1,76 @@
-def hacer_movimientos_correspondientes(tablero:list, posicion:int, es_respuesta_correcta:bool) -> int:
+def hacer_movimientos_correspondientes(tablero: list, posicion: int, es_respuesta_correcta: bool) -> int:
     """
-    # realiza: Mueve al jugador hacia adelante si respondio correctamente, y hacia atras si no lo hizo
+    # realiza: mueve de posicion hacia atras o hacia adelante segun corresponda
 
     # args:
          -> tablero: lista que representa el tablero
-         -> posicion: posicion de partida
-         -> es_respuesta_correcta: un booleano que indica si la respuesta del usuario era correcta o no
+         -> posicion: posicion numerica actual
+         -> es_respuesta_correcta: indica si se respondio bien o mal
 
-    # return: la posicion donde quedara finalmente el jugador
-            
+    # return: la nueva posicion del jugador
     """
-
     if es_respuesta_correcta:
-        posicion_nueva = realizar_movimientos(tablero, posicion, 'suma')
-        print(informar_posicion('Sube', tablero, posicion, 'suma')) 
+        nueva_posicion = realizar_movimientos(tablero, posicion, 1)
 
     else:
-        posicion_nueva = realizar_movimientos(tablero, posicion, 'resta')
-        print(informar_posicion('Baja', tablero, posicion, 'resta'))
+        nueva_posicion = realizar_movimientos(tablero, posicion, -1)     
 
-    return posicion_nueva
+    return nueva_posicion
 
 
-def realizar_movimientos(tablero:list, posicion:int, operacion:str) -> int:
+def realizar_movimientos(tablero: list, posicion: int, direccion: int) -> int:
     """
-    # realiza: realiza los movimientos en el tablero dado
+    # realiza: mueve de posicion hacia atras o hacia adelante segun corresponda
 
     # args:
          -> tablero: lista que representa el tablero
-         -> posicion: posicion de partida
-         -> operacion: un string que indica si se hara una suma o una resta
+         -> posicion: posicion numerica actual
+         -> direccion: 1 si avanza, -1 si retrocede
 
-    # return: un entero que indica la posicion final luego de los movimientos correspondientes
-            
+    # return: la nueva posicion del jugador
     """
+    nueva_pos_actual = posicion + direccion
 
-    if operacion == 'suma':
-        ret = posicion + 1 + tablero[posicion + 1]
+    while nueva_pos_actual > 0 and nueva_pos_actual < 30 and tablero[nueva_pos_actual] > 0:
+        nueva_pos_actual = nueva_pos_actual + (tablero[nueva_pos_actual] * direccion)
 
-        if posicion == 13:
-            ret = posicion + 1 + tablero[posicion + 1] + tablero[posicion + 3]
-    else:
-        ret = posicion - 1 - tablero[posicion - 1]
-
-        if posicion == 17:
-            ret = posicion - 1 - tablero[posicion - 1] - tablero[posicion - 2] - tablero[posicion - 3]
-    
-    return ret
+    return nueva_pos_actual
 
 
-def informar_posicion(direccion:str, tablero:list, posicion:int, operacion:str) -> str:
+def informar_posicion(direccion: str, tablero: list, posicion_actual: int, direccion_numerica: int) -> str:
     """
-    # realiza: informa la posicion actual luego de haber avanzando o retrocedido
+    # realiza: Informa si se va a subir algun casillero extra
 
     # args:
-         -> direccion: hacia donde se mueve el jugador (para atras o para adelante)
-         -> tablero: lista que representa el mapa del juego
-         -> posicion: posicion sin avanzar posibles casilleros extras
-         -> operacion: un string que indica si se suma o si se resta
+         -> direccion: un string que sera 'Sube' o 'Baja'
+         -> tablero: lista que representa el tablero
+         -> posicion_actual: posicion antes de calcular lso movimientos extra
+         -> direccion_numerica: 1 si avanza, -1 si retrocede
 
-    # return: un mensaje indicando si se subieron o bajaron casilleros extras.
-            
+    # return: un string que informa cuantos casilleros extra se subieron
     """
-    if operacion == 'suma':
-        if tablero[posicion + 1] > 1:
-            ret = f"{direccion} {tablero[posicion + 1]} casilleros extra"
 
-        elif tablero[posicion + 1] == 1:
-            ret = f"{direccion} un casillero extra"
+    posicion = posicion_actual + direccion_numerica
+
+    casilleros_extras = 0
+
+
+    while posicion > 0 and posicion < 30 and tablero[posicion] > 0:
         
-        else:
-            ret = f"No se {direccion.lower()} ningun casillero extra "
+        salto = tablero[posicion]
+
+        casilleros_extras = casilleros_extras + salto
+
+        posicion = posicion + (salto * direccion_numerica)
 
 
-    if operacion == 'resta':
-        if tablero[posicion - 1] > 1:
-            ret = f"{direccion} {tablero[posicion - 1]} casilleros extra"
+    if casilleros_extras > 1:
+        mensaje = f"{direccion} {casilleros_extras} casilleros extra"
 
-        elif tablero[posicion - 1] == 1:
-            ret = f"{direccion} un casillero extra"
-        
-        else:
-            ret = f"No se {direccion.lower()} ningun casillero extra "
-        
+    elif casilleros_extras == 1:
+        mensaje = f"{direccion} un casillero extra"
 
-    return ret
-    
+    else:
+        mensaje = f"No se {direccion.lower()} ningun casillero extra"
+
+    return mensaje
