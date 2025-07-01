@@ -12,7 +12,7 @@ def guardar_datos_csv(ruta_archivo: str, datos: list) -> str:
     ret = ""
 
     try:
-        with open(ruta_archivo, 'a', encoding='utf-8') as file:
+        with open(ruta_archivo, 'a', encoding = 'utf-8') as file:
             file.write(str(datos[0]) + ", " + str(datos[1]) + "\n")
 
     except Exception as exc:

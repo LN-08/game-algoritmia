@@ -1,7 +1,7 @@
 from paquete_datos.const import *
 from paquete_datos.var import *
 from paquete_datos.tablero import *
-from paquete_datos.manejo_csv import *
+from paquete_funciones.manejo_csv import *
 
 from paquete_funciones.verificar_datos import *
 from paquete_funciones.manejo_preguntas import *
